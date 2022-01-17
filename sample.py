@@ -1,31 +1,16 @@
-lines = [[direction, int(number)] for direction, number in [
-    line.split(" ") for line in open("day2_input.txt", "r+").readlines()]]
+import collections
+import sys
 
-
-def solve(lines, part=1):
-    aim = 0
-    horiz = 0
-    depth = 0
-    for line in lines:
-        match line:
-            case ["forward", number]:
-                if part == 1:
-                    horiz += number
-                else:
-                    horiz += number
-                    depth = depth + (aim * number)
-            case ["up", number]:
-                if part == 1:
-                    depth -= number
-                else:
-                    aim -= number
-            case ["down", number]:
-                if part == 1:
-                    depth += number
-                else:
-                    aim += number
-    return horiz * depth
-
-
-# Print the answers.
-print(f"DAY TWO\nPart one: {solve(lines, 1)}\nPart two: {solve(lines, 2)}")
+ages = sys.stdin.read()
+# If receiving error mapping input, add a return before ending input stream
+fishies = list(map(int, ages.split(',')))
+# Create a deque that will hold number of fish with a timer equivalent to
+# their index w/in the deque
+totals = collections.deque(fishies.count(i) for i in range(9))
+# Loop over all 256 days
+for _ in range(256):
+    # Rotate all timers down one for the day and add in the parents
+    # of the newly added fish to the parents timer slot of 6
+    totals.rotate(-1)
+    totals[6] += totals[8]
+print(sum(totals))
