@@ -45,23 +45,151 @@ In the output values, how many times do digits 1, 4, 7, or 8 appear?
 
 # Part 1
 from pathlib import Path
+from itertools import permutations
 
-
-input_data: list[str] = list((Path('day8_input.txt').read_text().rstrip().split('\n')))
+input_data: list[str] = list((Path('input.txt').read_text().rstrip().split('\n')))
 data: list[tuple[str]] = [(left, right) for left, right in [ line.split(' | ') for line in input_data]]
 
-array_output = [word[1] for word in data]
-array_input = [word[0] for word in data]
+
+outputs = [word[1] for word in data]
+signals = [word[0] for word in data]
+
 
 print("Part 1 -Proof")
-
 total = 0
-for line in array_output:
+for line in outputs:
     for word in line.split():
         if len(word) == 2 or len(word) == 3 or len(word) == 4 or len(word) == 7:
             total += 1
-
 print(total)
 
 
+print("Part 2 -Proof")
+
+def find_digits():
+    """
+    Step 0) Sort  and  group by length.
+
+    Step 1) Some digits are easy to identify  because they have a unique number of segments:
+
+    Digits with length two char  is "1"
+    Digits with length three char  is "7"
+    Digits with length four char  is "4"
+    Digits with length seven char  is "8"
+
+
+    Step 2) If the length of the digit is six char then the digit can be either "0","6","9". So we  need to subtract the
+    two chars used in digit "1". If this can be done with one digit remaining then that  digit is "6".
+
+    Step 3) We have digits "0" and  "9" remaining. The digit "4" contains the same segments as digit "9" but
+    the digit "0" does not. So from "0" and "9", "0" is the digit which  does not contain  the middle segment.
+
+    Step 4)  We now know digits "0","6","9" which are the six char digits. We  need to look at the five char
+    digits, "2","3" and "5". All the chars from "6" are in "5"
+
+    Step 5) With "2" and "3" remaining we can see that "3" contains the same char as "1" and "2" does not.
+
+    """
+    pass
+
+def find1(arr: list)-> str:
+    return [item for item in arr if len(item) == 2]
+
+
+def find7(arr: list)-> str:
+    return [item for item in arr if len(item) == 3]
+
+
+def find4(arr: list)-> str:
+    return [item for item in arr if len(item) == 4]
+
+
+def find8(arr: list)-> str:
+    return [item for item in arr if len(item) == 7]
+
+
+def find(arr: list)-> str:
+    return [find1(item) for item in arr]
+
+
+def map_digits_to_numb_segments(num):
+    mapping = {
+    "1": 2,
+    "2": 5,
+    "3": 2,
+    "4": 4,
+    "5": 5,
+    "6": 6,
+    "7": 3,
+    "8": 7,
+    "9": 6,
+    "0": 6,
+    }
+    return mapping.get(num,"Invalid input")
+
+print(map_digits_to_numb_segments("1"))
+print(map_digits_to_numb_segments(0))
+
+
+
+
+
+
+
+def sortString(str):
+    return ''.join(sorted(str))
+
+
+
+sorted_outputs = []
+sorted_signals = []
+
+
+# sort letters in the patterns  and put  them in a new list.
+def sort_list_elements_alphabetically(unsorted_elements_list):
+    x_sorted_outputs = []
+    for line in unsorted_elements_list:
+        for word in line.split(" "):
+            new_word = ''.join(sorted(word))
+            x_sorted_outputs.append(new_word)
+    return x_sorted_outputs
+
+sorted_outputs = sort_list_elements_alphabetically(outputs)
+sorted_signals = sort_list_elements_alphabetically(signals)
+
+def convert(source: str) -> list:
+    return [[''.join(sorted(chunk)) for chunk in item.split()] for item in source]
+
+def sortedbylength(arr: list) -> list:
+    # Sorting using sorted function
+    # providing key as len
+    return [ sorted(item, key=len) for item in arr]
+
+
+print(outputs)
+woo = convert(outputs)
+print(woo)
+
+print("Sorted by length")
+print(sortedbylength(convert(outputs)))
+
+doo = sortedbylength(convert(outputs))
+print(find(doo))
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+This code takes a brute  force  approach. I  should understand it. 
+https://github.com/MasterMedo/aoc/blob/master/2021/day/8.py
+"""
 
