@@ -48,12 +48,10 @@ from pathlib import Path
 from itertools import permutations
 
 input_data: list[str] = list((Path('input.txt').read_text().rstrip().split('\n')))
-data: list[tuple[str]] = [(left, right) for left, right in [ line.split(' | ') for line in input_data]]
-
+data: list[tuple[str]] = [(left, right) for left, right in [line.split(' | ') for line in input_data]]
 
 outputs = [word[1] for word in data]
 signals = [word[0] for word in data]
-
 
 print("Part 1 -Proof")
 total = 0
@@ -63,8 +61,8 @@ for line in outputs:
             total += 1
 print(total)
 
-
 print("Part 2 -Proof")
+
 
 def find_digits():
     """
@@ -92,99 +90,72 @@ def find_digits():
     """
     pass
 
-def find1(arr: list)-> str:
-    return [item for item in arr if len(item) == 2]
 
 
-def find7(arr: list)-> str:
-    return [item for item in arr if len(item) == 3]
+def find(arr: list) -> str:
+    return [findmap(item) for item in arr]
 
 
-def find4(arr: list)-> str:
-    return [item for item in arr if len(item) == 4]
-
-
-def find8(arr: list)-> str:
-    return [item for item in arr if len(item) == 7]
-
-
-def find(arr: list)-> str:
-    return [find1(item) for item in arr]
+def findmap(arr: list) -> str:
+    return [map_no_segments_to_digits(len(item)) for item in arr]
 
 
 def map_digits_to_numb_segments(num):
     mapping = {
-    "1": 2,
-    "2": 5,
-    "3": 2,
-    "4": 4,
-    "5": 5,
-    "6": 6,
-    "7": 3,
-    "8": 7,
-    "9": 6,
-    "0": 6,
+        "1": 2,
+        "2": 5,
+        "3": 2,
+        "4": 4,
+        "5": 5,
+        "6": 6,
+        "7": 3,
+        "8": 7,
+        "9": 6,
+        "0": 6,
     }
-    return mapping.get(num,"Invalid input")
-
-print(map_digits_to_numb_segments("1"))
-print(map_digits_to_numb_segments(0))
+    return mapping.get(num, "Invalid input")
 
 
-
-
-
-
-
-def sortString(str):
-    return ''.join(sorted(str))
-
-
-
-sorted_outputs = []
-sorted_signals = []
-
-
-# sort letters in the patterns  and put  them in a new list.
-def sort_list_elements_alphabetically(unsorted_elements_list):
-    x_sorted_outputs = []
-    for line in unsorted_elements_list:
-        for word in line.split(" "):
-            new_word = ''.join(sorted(word))
-            x_sorted_outputs.append(new_word)
-    return x_sorted_outputs
-
-sorted_outputs = sort_list_elements_alphabetically(outputs)
-sorted_signals = sort_list_elements_alphabetically(signals)
+def map_no_segments_to_digits(num):
+    mapping = {
+        2: {1},
+        3: {7},
+        4: {4},
+        5: {5, 2},
+        6: {6, 9, 0},
+        7: {8},
+    }
+    return mapping.get(num, "Invalid input")
 
 def convert(source: str) -> list:
     return [[''.join(sorted(chunk)) for chunk in item.split()] for item in source]
 
+
 def sortedbylength(arr: list) -> list:
     # Sorting using sorted function
     # providing key as len
-    return [ sorted(item, key=len) for item in arr]
+    return [sorted(item, key=len) for item in arr]
 
-
+print("\n# Outputs")
 print(outputs)
-woo = convert(outputs)
-print(woo)
+print(convert(outputs))
 
-print("Sorted by length")
+print("\n# Output sorted by length")
 print(sortedbylength(convert(outputs)))
-
 doo = sortedbylength(convert(outputs))
 print(find(doo))
 
+print("\n# Input signals")
+print(signals)
+print(convert(signals))
 
+print("\n# Input signals sorted by length")
+print(sortedbylength(convert(signals)))
+print(find(sortedbylength(convert(signals))))
 
-
-
-
-
-
-
-
+""""
+I need some set arithmentic to solve the rest
+"""
 
 
 
@@ -192,4 +163,3 @@ print(find(doo))
 This code takes a brute  force  approach. I  should understand it. 
 https://github.com/MasterMedo/aoc/blob/master/2021/day/8.py
 """
-
