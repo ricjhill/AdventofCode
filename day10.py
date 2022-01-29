@@ -57,25 +57,105 @@ In the above example, an illegal ) was found twice (2*3 = 6 points), an illegal 
 Find the first illegal character in each corrupted line of the navigation subsystem. What is the total syntax error score for those errors?
 
 """
+from collections import deque
+from pathlib import Path
+from collections import deque
+
+input_data: list[int] = list(Path('day10_input.txt').read_text().rstrip().split('\n'))
 
 Opening_brackets = {'(','[','{','<'}
 Closing_brackets = {')',']','}','>'}
-Matches = {
+ReMatches = {
     '(': ')', '[': ']', '{': '}', '<': '>'
 }
 
-# Search a line for the bad character by adding all characters to a stack
-# searching for matches and either removing the matches or returning an
-# unmatched bracket back to the stack.
+Matches = {
+    ')': '(', ']': '[', '}': '{', '>': '<'
+}
+values = {')': 3, ']': 57, '}': 1197, '>': 25137}
+
+# Search a line for the bad characters.
+# If an opening bracket is found
+# Add its matching closing bracket to a stack
+# Get the next bracket, if it is opening bracket add its closing bracket again
+# If it is closing bracket then use pop, or popleft during a compare operation
+# to remove the last added bracket from the stack.
+# If this last added bracket does not match the current bracket, then
+# the line is corrupt and increment the total with the value.
+
+"""
+We can do this with a deque used as a stack LIFO and a function called.
+"""
 
 def getcorruptedchar(line):
-    stack = []
+    stack = deque()
+
+    #print(stack)
     for bracket in line:
-        if isopening(bracket):
-            stack.append(bracket)
-            continue
+        if bracket in Opening_brackets:
+            stack.appendleft(Matches.get(bracket))
+            #continue
+        elif bracket != stack.popleft():
+            #print(values.get(bracket))
+            #print(Matches.get(bracket))
+            value = values.get(bracket)
+            break
+    return value
 
 
 
+"""
+We can do this with a list used as a stack LIFO and a function called.
+"""
+
+def getcorruptedchar2(line):
+    stack = []
+    value = 0
+    for bracket in line:
+        if bracket in Opening_brackets:
+            stack.append(ReMatches.get(bracket))
+        elif bracket != stack.pop():
+            value = values.get(bracket)
+            break
+    return value
 
 
+total = 0
+for line in input_data:
+  total += getcorruptedchar2(line)
+
+print(total)
+
+
+
+"""
+We can do this with a deque used as a stack LIFO.
+"""
+
+pairs = {"(": ")", "[": "]", "{": "}", "<": ">"}
+values = {')': 3, ']': 57, '}': 1197, '>': 25137}
+
+total = 0
+for line in input_data:
+    stack = deque()
+    for char in line.strip():
+        if char == '(' or char == '[' or char == '{' or char == '<':
+            stack.appendleft(pairs[char])
+        elif stack.popleft() != char:
+            total += values[char]
+            break
+print(total)
+
+"""
+We can do this with a list used as a stack LIFO.
+"""
+total = 0
+for line in input_data:
+    stack = []
+    for char in line:
+        if char in Opening_brackets:
+            stack.append(pairs[char])
+        elif stack.pop() != char:
+            total += values[char]
+            break
+print(total)
