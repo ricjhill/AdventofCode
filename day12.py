@@ -117,7 +117,7 @@ input_data: list[int] = list(Path('day12_input.txt').read_text().rstrip().split(
 path_list = dict()
 
 for line in input_data:
-    a,b = line.strip().split('-')
+    a, b = line.strip().split('-')
     if a not in path_list:
         path_list[a] = set()
     if b not in path_list:
@@ -127,23 +127,23 @@ for line in input_data:
 
 visited = dict()
 
+def findPathsVisited(startofpath, consumed):
+    edge = (startofpath, tuple(sorted(consumed)))
+    if edge not in visited:
+        visited[edge] = findPaths(startofpath, consumed)
+    return visited[edge]
 
-def findPathsVisited(start, consumed):
-    id = (start, tuple(sorted(consumed)))
-    if id not in visited:
-        visited[id] = findPaths(start, consumed)
-    return visited[id]
 
-def findPaths(start, consumed):
+def findPaths(current_node, nodes_visited):
     paths = set()
-    for i in sorted(path_list[start] - consumed):
+    for i in sorted(path_list[current_node] - nodes_visited):
         if i == 'end':
-            paths.add((start, i))
+            paths.add((current_node, i))
         else:
             # Only add small caves to list of consumed ( they are lowercase )
-            solution = findPathsVisited(i, [consumed, consumed.union({i})][i.islower()])
+            solution = findPathsVisited(i, [nodes_visited, nodes_visited.union({i})][i.islower()])
             for s in solution:
-                paths.add(tuple([start] + list(s)))
+                paths.add(tuple([current_node] + list(s)))
     return paths
 
 paths = findPathsVisited('start', {'start'})
