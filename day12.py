@@ -113,7 +113,6 @@ from pathlib import Path
 from collections import deque
 
 input_data: list[int] = list(Path('day12_input.txt').read_text().rstrip().split('\n'))
-
 path_list = dict()
 
 for line in input_data:
