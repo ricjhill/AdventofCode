@@ -1,5 +1,4 @@
 KHSSCSKKCPFKPPBBOKVF
-
 OS -> N
 KO -> O
 SK -> B

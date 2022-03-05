@@ -41,7 +41,7 @@ Apply 10 steps of pair insertion to the polymer template and find the most and l
 from pathlib import Path
 import string
 
-input_data: list[str] = list(Path('input.txt').read_text().rstrip().split('\n'))
+input_data: list[str] = list(Path('day14_input.txt').read_text().rstrip().split('\n'))
 
 template = input_data.pop(0)
 
