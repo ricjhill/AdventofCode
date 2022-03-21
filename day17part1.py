@@ -1,5 +1,9 @@
 """
 target area: x=253..280, y=-73..-46
+
+Test
+target area: x=20..30, y=-10..-5
+EXPECTED = 45
 """
 
 from pathlib import Path
